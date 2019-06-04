@@ -14,8 +14,8 @@ file { "$script_path/rsnapshot_backup.sh":
   group   => root,
   mode    => '0544',
   owner   => root,
-  require => File[$script_path]
-  source  => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh'
+  require => File[$script_path],
+  source  => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh',
 }
 
   # cronjobs

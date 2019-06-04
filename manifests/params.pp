@@ -33,10 +33,10 @@ class rsnapshot::params {
   $cmd_postexec = undef
   $no_create_root = 0
 
-  $retain_hourly = 6
-  $retain_daily = 7
-  $retain_weekly = 4
-  $retain_monthly = 3
+  $retain_hourly  = 0
+  $retain_daily   = 14
+  $retain_weekly  = 8
+  $retain_monthly = 2
 
   $verbose = 2
   $log_level = 3

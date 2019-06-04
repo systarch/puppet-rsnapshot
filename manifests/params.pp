@@ -48,11 +48,11 @@ class rsnapshot::params {
   $stop_on_stale_lockfile = undef
   $one_fs = undef
 
-  $backup_hourly_cron = '*/2'
-  $backup_time_minute = fqdn_rand(59, 'rsnapshot_minute')
-  $backup_time_hour = fqdn_rand(23, 'rsnapshot_hour')
-  $backup_time_weekday = 6
-  $backup_time_dom = 15
+  $backup_hourly_cron  = '*/8'
+  $backup_time_minute  = 0
+  $backup_time_hour    = 22
+  $backup_time_weekday = 0
+  $backup_time_dom     = 1
 
 
   $rsync_short_args = '-a'

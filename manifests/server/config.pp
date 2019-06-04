@@ -80,6 +80,10 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
+  file { $wrapper_path :
+    ensure => directory,
+  }
+
   # cronjobs
 
   ## hourly

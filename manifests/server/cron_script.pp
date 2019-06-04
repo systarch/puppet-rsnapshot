@@ -51,15 +51,15 @@ class rsnapshot::server::cron_script (
   }
 
   ## weekly
-#  if ($retain_weekly > 0) {
-#    cron { rsnapshot-weekly :
-#      command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh weekly',
-#      user    => $server_user,
-#      hour    => ($backup_time_hour + 3) % 24,
-#      minute  => ($backup_time_minute + 50) % 60,
-#      weekday => $backup_time_weekday,
-#    }
-#  }
+  if ($retain_weekly > 0) {
+    cron { rsnapshot-weekly :
+      command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh weekly',
+      user    => $server_user,
+      hour    => ($backup_time_hour + 3) % 24,
+      minute  => ($backup_time_minute + 50) % 60,
+      weekday => $backup_time_weekday,
+    }
+  }
 
   ## monthly
 #  if ($retain_monthly > 0) {

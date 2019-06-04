@@ -81,35 +81,19 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
-  file { "${script_path}":
-    ensure  => directory,
-    group   => root,
-    mode    => '0744',
-    owner   => root,
+  file { $script_path:
+    ensure => directory,
+    group  => root,
+    mode   => '0755',
+    owner  => root,
   }
 
-  $rsnapshot_backup_sh = @(EOF)
-  #!/bin/bash
-
-  ## Enumerate all config files to iterate over
-  rm -f /tmp/.rsnapshot
-  /bin/ls -l /etc/rsnapshot/*.conf|/usr/bin/awk {'print $9'} > /tmp/.rsnapshot
-
-  ## Run backups 1 config file at a time
-  while read config; do
-    /usr/bin/rsnapshot -c $config $1
-  done </tmp/.rsnapshot
-
-  ## Remove the list of config files
-  rm -f /tmp/.rsnapshot
-  | EOF
-
   file { "$script_path/rsnapshot_backup.sh" :
-    content => inline_template($rsnapshot_backup_sh),
-    ensure  => present,
-    group   => root,
-    mode    => '0744',
-    owner   => root,
+    ensure => present,
+    group  => root,
+    mode   => '0544',
+    owner  => root,
+    source => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh'
   }
 
   # cronjobs

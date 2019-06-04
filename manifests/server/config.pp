@@ -88,7 +88,7 @@ define rsnapshot::server::config (
 #    owner  => root,
 #  }
 
-  file { "/tmp/rsnapshot_backup.sh" :
+  file { '/tmp/rsnapshot_backup.sh':
     ensure => present,
     group  => root,
     mode   => '0544',

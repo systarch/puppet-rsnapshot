@@ -81,14 +81,14 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
-#  file { "${script_path}":
-#    ensure  => directory,
-#    group   => root,
-#    mode    => '0744',
-#    owner   => root,
-#  }
+  file { "${script_path}":
+    ensure  => directory,
+    group   => root,
+    mode    => '0744',
+    owner   => root,
+  }
 
-  $rsnapshot_backup = @(EOF)
+  $rsnapshot_backup_sh = @(EOF)
   #!/bin/bash
 
   ## Enumerate all config files to iterate over
@@ -104,13 +104,12 @@ define rsnapshot::server::config (
   rm -f /tmp/.rsnapshot
   | EOF
 
-  file { '/opt/rsnapshot_wrappers/rsnapshot_backup.sh' :
-    content => inline_template($rsnapshot_backup),
+  file { "$script_path/rsnapshot_backup.sh" :
+    content => inline_template($rsnapshot_backup_sh),
     ensure  => present,
     group   => root,
     mode    => '0744',
     owner   => root,
-    require => File[$script_path],
   }
 
   # cronjobs

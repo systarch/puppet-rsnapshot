@@ -69,14 +69,6 @@ define rsnapshot::server::config (
 
   $rsync_long_args_final = "${ssh_args_processed} ${rsync_long_args} ${rsync_wrapper_processed}".strip
 
-  file { '/tmp/rsnapshot_backup.sh':
-    ensure => present,
-    group  => root,
-    mode   => '0544',
-    owner  => root,
-    source => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh'
-  }
-
   file { $snapshot_root :
     ensure  => directory,
     require => File[$backup_path]
@@ -86,57 +78,6 @@ define rsnapshot::server::config (
     ensure  => present,
     require => File[$log_path]
   }
-
-#  file { $script_path:
-#    ensure => directory,
-#    group  => root,
-#    mode   => '0755',
-#    owner  => root,
-#  }
-
-  # cronjobs
-
-  ## hourly
-#  if ($retain_hourly > 0) {
-#    cron { "rsnapshot-${name}-hourly" :
-#      command => "${rsnapshot::server::cmd_rsnapshot} -c ${config_file} hourly",
-#      user    => $server_user,
-#      hour    => $backup_hourly_cron,
-#      minute  => $backup_time_minute
-#    }
-#  }
-
-  ## daily
-#  if ($retain_daily > 0) {
-#    cron { "rsnapshot-${name}-daily" :
-#      command => "${rsnapshot::server::cmd_rsnapshot} -c ${config_file} daily",
-#      user    => $server_user,
-#      hour    => $backup_time_hour,
-#      minute  => ($backup_time_minute + 50) % 60
-#    }
-#  }
-
-  ## weekly
-#  if ($retain_weekly > 0) {
-#    cron { "rsnapshot-${name}-weekly" :
-#      command => "${rsnapshot::server::cmd_rsnapshot} -c ${config_file} weekly",
-#      user    => $server_user,
-#      hour    => ($backup_time_hour + 3) % 24,
-#      minute  => ($backup_time_minute + 50) % 60,
-#      weekday => $backup_time_weekday
-#    }
-#  }
-
-  ## monthly
-#  if ($retain_monthly > 0) {
-#    cron { "rsnapshot-${name}-monthly" :
-#      command  => "${rsnapshot::server::cmd_rsnapshot} -c ${config_file} monthly",
-#      user     => $server_user,
-#      hour     => ($backup_time_hour + 7) % 24,
-#      minute   => ($backup_time_minute + 50) % 60,
-#      monthday => $backup_time_dom
-#    }
-#  }
 
   $programs = {
     cmd_cp => $rsnapshot::server::cmd_cp,

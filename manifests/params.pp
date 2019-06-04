@@ -61,6 +61,7 @@ class rsnapshot::params {
   $du_args = '-csh'
 
   $wrapper_path = '/opt/rsnapshot_wrappers/'
+  $script_path  = '/etc/rsnapshot/scripts'
 
   case $::osfamily {
     debian: {

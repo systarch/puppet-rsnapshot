@@ -34,6 +34,7 @@ define rsnapshot::server::config (
   $one_fs = $rsnapshot::params::one_fs,
   $rsync_short_args = $rsnapshot::params::rsync_short_args,
   $rsync_long_args = $rsnapshot::params::rsync_long_args,
+  $script_path = $rsnapshot::params::script_path,
   $ssh_args = $rsnapshot::params::ssh_args,
   $wrapper_path = $rsnapshot::params::wrapper_path,
   $du_args = $rsnapshot::params::du_args,
@@ -80,6 +81,13 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
+  file { $script_path:
+    ensure => directory,
+    group   => root,
+    mode    => '0744',
+    owner   => root,
+  }
+
   $rsnapshot_backup = @(EOF)
   #!/bin/bash
 
@@ -95,13 +103,13 @@ define rsnapshot::server::config (
   ## Remove the list of config files
   rm -f /tmp/.rsnapshot
   | EOF
-  file { "$wrapper_path/rsnapshot_backup.sh" :
+  file { "$script_path/rsnapshot_backup.sh" :
     content => inline_template($rsnapshot_backup),
     ensure  => present,
     group   => root,
     mode    => '0744',
     owner   => root,
-    require => File["$wrapper_path"],
+    require => File[$script_path],
     #notify  => Service[$fail2ban::service_name],
   }
 

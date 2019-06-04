@@ -49,8 +49,8 @@ class rsnapshot::params {
   $one_fs = undef
 
   $backup_hourly_cron  = '*/8'
-  $backup_time_minute  = 0
-  $backup_time_hour    = 22
+  $backup_time_minute  = 45
+  $backup_time_hour    = 16
   $backup_time_weekday = 0
   $backup_time_dom     = 1
 

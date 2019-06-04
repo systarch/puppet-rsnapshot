@@ -81,8 +81,8 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
-  file { $script_path:
-    ensure => directory,
+  file { "$script_path":
+    ensure  => directory,
     group   => root,
     mode    => '0744',
     owner   => root,
@@ -103,6 +103,7 @@ define rsnapshot::server::config (
   ## Remove the list of config files
   rm -f /tmp/.rsnapshot
   | EOF
+
   file { "$script_path/rsnapshot_backup.sh" :
     content => inline_template($rsnapshot_backup),
     ensure  => present,
@@ -110,7 +111,6 @@ define rsnapshot::server::config (
     mode    => '0744',
     owner   => root,
     require => File[$script_path],
-    #notify  => Service[$fail2ban::service_name],
   }
 
   # cronjobs

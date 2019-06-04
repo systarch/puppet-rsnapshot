@@ -55,20 +55,20 @@ class rsnapshot::server::cron_script (
     cron { rsnapshot-weekly :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh weekly',
       user    => $server_user,
-      hour    => ($backup_time_hour + 3) % 24,
-      minute  => ($backup_time_minute + 50) % 60,
+      hour    => ($backup_time_hour + 12) % 24,
+      minute  => $backup_time_minute,
       weekday => $backup_time_weekday,
     }
   }
 
   ## monthly
-#  if ($retain_monthly > 0) {
-#    cron { "rsnapshot-monthly :
-#      command  => '/etc/rsnapshot/scripts/rsnapshot_backup.sh monthly',
-#      user     => $server_user,
-#      hour     => ($backup_time_hour + 7) % 24,
-#      minute   => ($backup_time_minute + 50) % 60,
-#      monthday => $backup_time_dom,
-#    }
-#  }
+  if ($retain_monthly > 0) {
+    cron { rsnapshot-monthly :
+      command  => '/etc/rsnapshot/scripts/rsnapshot_backup.sh monthly',
+      user     => $server_user,
+      hour     => ($backup_time_hour + 10) % 24,
+      minute   => $backup_time_minute,
+      monthday => $backup_time_dom,
+    }
+  }
 }

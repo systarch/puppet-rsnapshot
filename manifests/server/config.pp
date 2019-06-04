@@ -81,14 +81,14 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
-  file { $script_path:
-    ensure => directory,
-    group  => root,
-    mode   => '0755',
-    owner  => root,
-  }
+#  file { $script_path:
+#    ensure => directory,
+#    group  => root,
+#    mode   => '0755',
+#    owner  => root,
+#  }
 
-  file { "$script_path/rsnapshot_backup.sh" :
+  file { "/tmp/rsnapshot_backup.sh" :
     ensure => present,
     group  => root,
     mode   => '0544',

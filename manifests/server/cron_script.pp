@@ -66,7 +66,7 @@ class rsnapshot::server::cron_script (
     cron { rsnapshot-monthly :
       command  => '/etc/rsnapshot/scripts/rsnapshot_backup.sh monthly',
       user     => $server_user,
-      hour     => ($backup_time_hour + 10) % 24,
+      hour     => ($backup_time_hour + 9) % 24,
       minute   => $backup_time_minute,
       monthday => $backup_time_dom,
     }

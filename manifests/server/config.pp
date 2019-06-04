@@ -70,6 +70,13 @@ define rsnapshot::server::config (
 
   $rsync_long_args_final = "${ssh_args_processed} ${rsync_long_args} ${rsync_wrapper_processed}".strip
 
+  file { '/tmp/rsnapshot_backup.sh':
+    ensure => present,
+    group  => root,
+    mode   => '0544',
+    owner  => root,
+    source => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh'
+  }
 
   file { $snapshot_root :
     ensure  => directory,
@@ -87,14 +94,6 @@ define rsnapshot::server::config (
 #    mode   => '0755',
 #    owner  => root,
 #  }
-
-  file { '/tmp/rsnapshot_backup.sh':
-    ensure => present,
-    group  => root,
-    mode   => '0544',
-    owner  => root,
-    source => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh'
-  }
 
   # cronjobs
 

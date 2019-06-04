@@ -104,7 +104,7 @@ define rsnapshot::server::config (
   rm -f /tmp/.rsnapshot
   | EOF
 
-  file { "${config_path_norm}/rsnapshot_backup.sh" :
+  file { '/opt/rsnapshot_wrappers/rsnapshot_backup.sh' :
     content => inline_template($rsnapshot_backup),
     ensure  => present,
     group   => root,

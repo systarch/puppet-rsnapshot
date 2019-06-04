@@ -81,37 +81,37 @@ define rsnapshot::server::config (
     require => File[$log_path]
   }
 
-  file { "$script_path":
+  file { "${script_path}":
     ensure  => directory,
     group   => root,
     mode    => '0744',
     owner   => root,
   }
 
-  $rsnapshot_backup = @(EOF)
-  #!/bin/bash
-
-  ## Enumerate all config files to iterate over
-  rm -f /tmp/.rsnapshot
-  /bin/ls -l /etc/rsnapshot/*.conf|/usr/bin/awk {'print $9'} > /tmp/.rsnapshot
-
-  ## Run backups 1 config file at a time
-  while read config; do
-    /usr/bin/rsnapshot -c $config $1
-  done </tmp/.rsnapshot
-
-  ## Remove the list of config files
-  rm -f /tmp/.rsnapshot
-  | EOF
-
-  file { "$script_path/rsnapshot_backup.sh" :
-    content => inline_template($rsnapshot_backup),
-    ensure  => present,
-    group   => root,
-    mode    => '0744',
-    owner   => root,
-    require => File[$script_path],
-  }
+#  $rsnapshot_backup = @(EOF)
+#  #!/bin/bash
+#
+#  ## Enumerate all config files to iterate over
+#  rm -f /tmp/.rsnapshot
+#  /bin/ls -l /etc/rsnapshot/*.conf|/usr/bin/awk {'print $9'} > /tmp/.rsnapshot
+#
+#  ## Run backups 1 config file at a time
+#  while read config; do
+#    /usr/bin/rsnapshot -c $config $1
+#  done </tmp/.rsnapshot
+#
+#  ## Remove the list of config files
+#  rm -f /tmp/.rsnapshot
+#  | EOF
+#
+#  file { "$script_path/rsnapshot_backup.sh" :
+#    content => inline_template($rsnapshot_backup),
+#    ensure  => present,
+#    group   => root,
+#    mode    => '0744',
+#    owner   => root,
+#    require => File[$script_path],
+#  }
 
   # cronjobs
 

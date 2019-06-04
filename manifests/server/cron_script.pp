@@ -36,7 +36,7 @@ class rsnapshot::server::cron_script (
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh hourly',
       user    => $server_user,
       hour    => $backup_hourly_cron,
-      minute  => $backup_time_minute
+      minute  => $backup_time_minute,
     }
   }
 
@@ -46,7 +46,7 @@ class rsnapshot::server::cron_script (
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh daily',
       user    => $server_user,
       hour    => $backup_time_hour,
-      minute  => $backup_time_minute
+      minute  => $backup_time_minute,
     }
   }
 
@@ -57,7 +57,7 @@ class rsnapshot::server::cron_script (
       user    => $server_user,
       hour    => ($backup_time_hour + 3) % 24,
       minute  => ($backup_time_minute + 50) % 60,
-      weekday => $backup_time_weekday
+      weekday => $backup_time_weekday,
     }
   }
 
@@ -68,7 +68,7 @@ class rsnapshot::server::cron_script (
       user     => $server_user,
       hour     => ($backup_time_hour + 7) % 24,
       minute   => ($backup_time_minute + 50) % 60,
-      monthday => $backup_time_dom
+      monthday => $backup_time_dom,
     }
   }
 }

@@ -34,7 +34,6 @@ define rsnapshot::server::config (
   $one_fs = $rsnapshot::params::one_fs,
   $rsync_short_args = $rsnapshot::params::rsync_short_args,
   $rsync_long_args = $rsnapshot::params::rsync_long_args,
-  $script_path = $rsnapshot::params::script_path,
   $ssh_args = $rsnapshot::params::ssh_args,
   $wrapper_path = $rsnapshot::params::wrapper_path,
   $du_args = $rsnapshot::params::du_args,

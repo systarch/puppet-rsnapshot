@@ -53,6 +53,7 @@ class rsnapshot::server(
   ) inherits rsnapshot::params {
 
   include rsnapshot::server::install
+  include rsnapshot::server::cron_script
 
   # Add logging folder
   file { $log_path :

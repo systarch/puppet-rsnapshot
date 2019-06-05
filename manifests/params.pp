@@ -16,7 +16,7 @@ class rsnapshot::params {
   $backup_time_hour       = fqdn_rand(23, 'rsnapshot_hour')
   $backup_time_minute     = fqdn_rand(59, 'rsnapshot_minute')
   $backup_time_weekday    = 6
-  $client_packages        = [ 'rsync' ]
+  $client_packages        = ['rsync']
   $client_user            = 'backshots'
   $cmd_postexec           = undef
   $cmd_preexec            = undef
@@ -52,40 +52,40 @@ class rsnapshot::params {
 
   case $::osfamily {
     debian: {
-      $cmd_rsnapshot = '/usr/bin/rsnapshot'
-      $cmd_cp = '/bin/cp'
-      $cmd_rm = '/bin/rm'
-      $cmd_rsync = '/usr/bin/rsync'
-      $cmd_client_rsync = '/usr/bin/rsync'
-      $cmd_client_sudo = '/usr/bin/sudo'
-      $cmd_ssh = '/usr/bin/ssh'
-      $cmd_logger = '/usr/bin/logger'
-      $cmd_du = '/usr/bin/du'
-      $cmd_rsnapshot_diff = undef
+      $cmd_client_rsync       = '/usr/bin/rsync'
+      $cmd_client_sudo        = '/usr/bin/sudo'
+      $cmd_cp                 = '/bin/cp'
+      $cmd_du                 = '/usr/bin/du'
+      $cmd_logger             = '/usr/bin/logger'
+      $cmd_rm                 = '/bin/rm'
+      $cmd_rsnapshot_diff     = undef
+      $cmd_rsnapshot          = '/usr/bin/rsnapshot'
+      $cmd_rsync              = '/usr/bin/rsync'
+      $cmd_ssh                = '/usr/bin/ssh'
       $linux_lvm_cmd_lvcreate = undef
       $linux_lvm_cmd_lvremove = undef
-      $linux_lvm_cmd_mount = '/bin/mount'
-      $linux_lvm_cmd_umount = '/bin/umount'
-      $lock_path = '/var/run/'
-      $log_path = '/var/log/'
+      $linux_lvm_cmd_mount    = '/bin/mount'
+      $linux_lvm_cmd_umount   = '/bin/umount'
+      $lock_path              = '/var/run/'
+      $log_path               = '/var/log/'
     }
     default: {
-      $cmd_rsnapshot = '/usr/local/bin/rsnapshot'
-      $cmd_cp = undef
-      $cmd_rm = undef
-      $cmd_rsync = '/usr/bin/rsync'
-      $cmd_client_rsync = '/usr/bin/rsync'
-      $cmd_client_sudo = '/usr/bin/sudo'
-      $cmd_ssh = undef
-      $cmd_logger = undef
-      $cmd_du = undef
-      $cmd_rsnapshot_diff = undef
+      $cmd_client_rsync       = '/usr/bin/rsync'
+      $cmd_client_sudo        = '/usr/bin/sudo'
+      $cmd_cp                 = undef
+      $cmd_du                 = undef
+      $cmd_logger             = undef
+      $cmd_rm                 = undef
+      $cmd_rsnapshot_diff     = undef
+      $cmd_rsnapshot          = '/usr/local/bin/rsnapshot'
+      $cmd_rsync              = '/usr/bin/rsync'
+      $cmd_ssh                = undef
       $linux_lvm_cmd_lvcreate = undef
       $linux_lvm_cmd_lvremove = undef
-      $linux_lvm_cmd_mount = undef
-      $linux_lvm_cmd_umount = undef
-      $lock_path = '/var/run/'
-      $log_path = '/var/log/'
+      $linux_lvm_cmd_mount    = undef
+      $linux_lvm_cmd_umount   = undef
+      $lock_path              = '/var/run/'
+      $log_path               = '/var/log/'
     }
   }
 

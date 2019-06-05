@@ -17,7 +17,7 @@ class rsnapshot::params {
   $backup_time_minute     = fqdn_rand(59, 'rsnapshot_minute')
   $backup_time_weekday    = 6
   $client_packages        = ['rsync']
-  $client_user            = 'backshots'
+  $client_user            = 'rsnapshot'
   $cmd_postexec           = undef
   $cmd_preexec            = undef
   $du_args                = '-csh'
@@ -26,10 +26,10 @@ class rsnapshot::params {
   $no_create_root         = 0
   $one_fs                 = undef
   $push_ssh_key           = true
-  $retain_daily           = 7
-  $retain_hourly          = 6
-  $retain_monthly         = 3
-  $retain_weekly          = 4
+  $retain_daily           = 14
+  $retain_hourly          = 0
+  $retain_monthly         = 2
+  $retain_weekly          = 8
   $rsync_long_args        = '--delete --numeric-ids --relative --delete-excluded'
   $rsync_numtries         = 2
   $rsync_short_args       = '-a'

@@ -56,7 +56,8 @@ class rsnapshot::server(
   include rsnapshot::server::cron_script
 
   # Auto create root 4096 bit SSH RSA key pair if it doesn't exist
-  exec { 'ssh-keygen -b 4096 -t rsa -f /root/.ssh/id_rsa -q -N ""':
+  exec { 'create root ssh key pair':
+    command     => 'ssh-keygen -b 4096 -t rsa -f /root/.ssh/id_rsa -q -N ""',
     creates     => '/root/.ssh/id_rsa',
     path        => $::path,
     refreshonly => true,

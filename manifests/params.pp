@@ -33,6 +33,7 @@ class rsnapshot::params {
   $rsync_long_args        = '--delete --numeric-ids --relative --delete-excluded'
   $rsync_numtries         = 2
   $rsync_short_args       = '-a'
+  $script_path            = '/etc/rsnapshot/scripts'
   $server_backup_path     = '/backups'
   $server_config_path     = '/etc/rsnapshot'
   $server_log_path        = '/var/log/rsnapshot'

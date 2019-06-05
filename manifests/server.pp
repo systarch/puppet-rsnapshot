@@ -64,9 +64,11 @@ class rsnapshot::server(
 
   # Add config path
   file { $config_path :
-    ensure => directory,
-    owner  => $server_user,
-    group  => $server_user
+    ensure  => directory,
+    group   => $server_user,
+    owner   => $server_user,
+    purge   => true,
+    recurse => true,
   }->
 
   # Add logging folder

@@ -9,8 +9,9 @@ class rsnapshot::server::cron_script (
   $retain_weekly       = $rsnapshot::params::retain_weekly,
   $retain_monthly      = $rsnapshot::params::retain_monthly,
   $script_path         = $rsnapshot::params::script_path,
+  $server_config_path  = $rsnapshot::params::server_config_path,
   $server_user         = $rsnapshot::params::server_user,
-){
+) inherits rsnapshot::params {
 
   file { $script_path:
     ensure => directory,
@@ -20,12 +21,12 @@ class rsnapshot::server::cron_script (
   }
 
   file { "$script_path/rsnapshot_backup.sh":
+    content => template('rsnapshot/rsnapshot_backup.sh.erb'),
     ensure  => present,
     group   => root,
     mode    => '0544',
     owner   => root,
     require => File[$script_path],
-    source  => 'puppet:///modules/rsnapshot/rsnapshot_backup.sh',
   }
 
   ## CRON Jobs

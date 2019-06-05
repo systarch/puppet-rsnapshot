@@ -58,9 +58,8 @@ class rsnapshot::server(
   # Auto create root 4096 bit SSH RSA key pair if it doesn't exist
   exec { 'create root ssh key pair':
     command     => 'ssh-keygen -b 4096 -t rsa -f /root/.ssh/id_rsa -q -N ""',
-    creates     => '/root/.ssh/id_rsa',
+    creates     => ['/root/.ssh/id_rsa','/root/.ssh/id_rsa.pub'],
     path        => $::path,
-    refreshonly => true,
   }
 
   # Add logging folder

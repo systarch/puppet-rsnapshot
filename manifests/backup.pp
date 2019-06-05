@@ -1,9 +1,8 @@
 define rsnapshot::backup (
   $source_path,
-  $host = $::fqdn,
+  $host   = $::fqdn,
   $options = {},
-  ) {
-
+){
   @@rsnapshot::server::backup_config { "${host}_${source_path}":
     source_path => $source_path,
     host        => $host,
@@ -12,5 +11,4 @@ define rsnapshot::backup (
     options     => $options,
     config_file => undef,
   }
-
 }

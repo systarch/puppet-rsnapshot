@@ -1,9 +1,9 @@
 class rsnapshot::client::wrappers (
-  $wrapper_path = $rsnapshot::params::wrapper_path,
-  $preexec = [],
-  $postexec = [],
   $cmd_client_rsync = $rsnapshot::params::cmd_client_rsync,
-  $cmd_client_sudo = $rsnapshot::params::cmd_client_sudo,
+  $cmd_client_sudo  = $rsnapshot::params::cmd_client_sudo,
+  $postexec         = [],
+  $preexec          = [],
+  $wrapper_path     = $rsnapshot::params::wrapper_path,
 ) inherits rsnapshot::params {
 
   assert_private()

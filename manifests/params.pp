@@ -1,15 +1,5 @@
 # Class: rsnapshot::params
-#
 # This class manages parameters for the rsnapshot module
-#
-# Parameters:
-#
-# Actions:
-#
-# Requires:
-#
-# Sample Usage:
-#
 class rsnapshot::params {
   $backup_hourly_cron     = '*/2'
   $backup_time_dom        = 15

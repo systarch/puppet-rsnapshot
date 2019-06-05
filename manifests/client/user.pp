@@ -1,15 +1,15 @@
 class rsnapshot::client::user (
-  $client_user = '',
-  $server_user = '',
-  $server = '',
-  $use_sudo = true,
-  $setup_sudo = true,
-  $push_ssh_key = true,
-  $wrapper_path = '',
-  $wrapper_sudo = $rsnapshot::params::wrapper_sudo,
+  $client_user          = '',
+  $push_ssh_key         = true,
+  $server               = '',
+  $server_user          = '',
+  $setup_sudo           = true,
+  $use_sudo             = true,
+  $wrapper_path         = '',
   $wrapper_rsync_sender = $rsnapshot::params::wrapper_rsync_sender,
-  $wrapper_rsync_ssh = $rsnapshot::params::wrapper_rsync_ssh,
-  ) {
+  $wrapper_rsync_ssh    = $rsnapshot::params::wrapper_rsync_ssh,
+  $wrapper_sudo         = $rsnapshot::params::wrapper_sudo,
+){
 
   assert_private()
 

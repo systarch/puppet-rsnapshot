@@ -29,9 +29,6 @@ class rsnapshot::server::cron_script (
     require => File[$script_path],
   }
 
-  ## CRON Jobs
-
-  ## hourly
   if ($retain_hourly > 0) {
     cron { rsnapshot-hourly :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh hourly',
@@ -41,7 +38,6 @@ class rsnapshot::server::cron_script (
     }
   }
 
-  ## daily
   if ($retain_daily > 0) {
     cron { rsnapshot-daily :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh daily',
@@ -51,7 +47,6 @@ class rsnapshot::server::cron_script (
     }
   }
 
-  ## weekly
   if ($retain_weekly > 0) {
     cron { rsnapshot-weekly :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh weekly',
@@ -62,7 +57,6 @@ class rsnapshot::server::cron_script (
     }
   }
 
-  ## monthly
   if ($retain_monthly > 0) {
     cron { rsnapshot-monthly :
       command  => '/etc/rsnapshot/scripts/rsnapshot_backup.sh monthly',
@@ -72,4 +66,5 @@ class rsnapshot::server::cron_script (
       monthday => $backup_time_dom,
     }
   }
+
 }

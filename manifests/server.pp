@@ -36,21 +36,21 @@
 # Copyright 2015 Your name here, unless otherwise noted.
 #
 class rsnapshot::server(
-  $config_path = $rsnapshot::params::server_config_path,
-  $backup_path = $rsnapshot::params::server_backup_path,
-  $log_path = $rsnapshot::params::server_log_path,
-  $lock_path = $rsnapshot::params::lock_path,
-  $server_user = $rsnapshot::params::server_user,
-  $no_create_root = $rsnapshot::params::no_create_root,
-  $verbose = $rsnapshot::params::verbose,
-  $log_level = $rsnapshot::params::log_level,
-  $link_dest = $rsnapshot::params::link_dest,
-  $sync_first = $rsnapshot::params::sync_first,
-  $use_lazy_deletes = $rsnapshot::params::use_lazy_deletes,
-  $rsync_numtries = $rsnapshot::params::rsync_numtries,
+  $backup_path            = $rsnapshot::params::server_backup_path,
+  $config_path            = $rsnapshot::params::server_config_path,
+  $du_args                = $rsnapshot::params::du_args,
+  $link_dest              = $rsnapshot::params::link_dest,
+  $lock_path              = $rsnapshot::params::lock_path,
+  $log_level              = $rsnapshot::params::log_level,
+  $log_path               = $rsnapshot::params::server_log_path,
+  $no_create_root         = $rsnapshot::params::no_create_root,
+  $rsync_numtries         = $rsnapshot::params::rsync_numtries,
+  $server_user            = $rsnapshot::params::server_user,
   $stop_on_stale_lockfile = $rsnapshot::params::stop_on_stale_lockfile,
-  $du_args = $rsnapshot::params::du_args,
-  ) inherits rsnapshot::params {
+  $sync_first             = $rsnapshot::params::sync_first,
+  $use_lazy_deletes       = $rsnapshot::params::use_lazy_deletes,
+  $verbose                = $rsnapshot::params::verbose,
+) inherits rsnapshot::params {
 
   include rsnapshot::server::install
   include rsnapshot::server::cron_script
@@ -60,6 +60,26 @@ class rsnapshot::server(
     command     => 'ssh-keygen -b 4096 -t rsa -f /root/.ssh/id_rsa -q -N ""',
     creates     => ['/root/.ssh/id_rsa','/root/.ssh/id_rsa.pub'],
     path        => $::path,
+  }
+
+  file { '/etc/cron.daily/logrotate': ensure => absent}
+
+  $rsnapshot_logrotate = @(EOF)
+  <%= @log_path %>/*.log {
+  	rotate 3
+  	monthly
+  	compress
+  	missingok
+  }
+  | EOF
+
+  file { '/etc/logrotate.d/rsnapshot':
+    backup  => false,
+    ensure  => present,
+    content => inline_template($rsnapshot_logrotate),
+    replace => true,
+    owner   => root,
+    group   => root,
   }
 
   # Add logging folder

@@ -11,57 +11,44 @@
 # Sample Usage:
 #
 class rsnapshot::params {
-
-  $use_sudo = true
-  $setup_sudo = true
-  $push_ssh_key = true
-
-  $wrapper_rsync_sender = 'rsync_sender.sh'
-  $wrapper_rsync_ssh = 'rsync_ssh.sh'
-  $wrapper_sudo = 'rsync_sudo.sh'
-
-  $server_packages = [ 'rsnapshot' ]
-  $client_packages = [ 'rsync' ]
-  $client_user = 'backshots'
-  $server_user = 'root'
-
-  $server_log_path = '/var/log/rsnapshot'
-  $server_config_path = '/etc/rsnapshot'
-  $server_backup_path = '/backups/rsnapshot'
-
-  $cmd_preexec = undef
-  $cmd_postexec = undef
-  $no_create_root = 0
-
-  $retain_hourly  = 0
-  $retain_daily   = 14
-  $retain_weekly  = 8
-  $retain_monthly = 2
-
-  $verbose = 2
-  $log_level = 3
-
-  $link_dest = undef
-  $sync_first = undef
-  $use_lazy_deletes = undef
-  $rsync_numtries = undef
-  $stop_on_stale_lockfile = undef
-  $one_fs = undef
-
-  $backup_hourly_cron  = '*/8'
-  $backup_time_minute  = 0
-  $backup_time_hour    = 22
-  $backup_time_weekday = 0
-  $backup_time_dom     = 1
-
-
-  $rsync_short_args = '-a'
-  $rsync_long_args = '--delete --numeric-ids --relative --delete-excluded'
-  $ssh_args = undef
-  $du_args = '-csh'
-
-  $wrapper_path = '/opt/rsnapshot_wrappers/'
-  $script_path  = '/etc/rsnapshot/scripts'
+  $backup_hourly_cron     = '*/2'
+  $backup_time_dom        = 15
+  $backup_time_hour       = fqdn_rand(23, 'rsnapshot_hour')
+  $backup_time_minute     = fqdn_rand(59, 'rsnapshot_minute')
+  $backup_time_weekday    = 6
+  $client_packages        = [ 'rsync' ]
+  $client_user            = 'backshots'
+  $cmd_postexec           = undef
+  $cmd_preexec            = undef
+  $du_args                = '-csh'
+  $link_dest              = 1
+  $log_level              = 5
+  $no_create_root         = 0
+  $one_fs                 = undef
+  $push_ssh_key           = true
+  $retain_daily           = 7
+  $retain_hourly          = 6
+  $retain_monthly         = 3
+  $retain_weekly          = 4
+  $rsync_long_args        = '--delete --numeric-ids --relative --delete-excluded'
+  $rsync_numtries         = 2
+  $rsync_short_args       = '-a'
+  $server_backup_path     = '/backups'
+  $server_config_path     = '/etc/rsnapshot'
+  $server_log_path        = '/var/log/rsnapshot'
+  $server_packages        = [ 'rsnapshot' ]
+  $server_user            = 'root'
+  $setup_sudo             = true
+  $ssh_args               = undef
+  $stop_on_stale_lockfile = 0
+  $sync_first             = 0
+  $use_lazy_deletes       = 0
+  $use_sudo               = true
+  $verbose                = 2
+  $wrapper_path           = '/opt/rsnapshot_wrappers/'
+  $wrapper_rsync_sender   = 'rsync_sender.sh'
+  $wrapper_rsync_ssh      = 'rsync_ssh.sh'
+  $wrapper_sudo           = 'rsync_sudo.sh'
 
   case $::osfamily {
     debian: {

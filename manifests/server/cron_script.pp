@@ -12,7 +12,8 @@ class rsnapshot::server::cron_script (
   $server_config_path  = $rsnapshot::params::server_config_path,
   $server_user         = $rsnapshot::params::server_user,
 ) inherits rsnapshot::params {
-
+  assert_private()
+  
   file { $script_path:
     ensure => directory,
     group  => root,

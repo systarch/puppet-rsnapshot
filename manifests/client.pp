@@ -37,58 +37,57 @@ class rsnapshot::client (
   $use_sudo             = $rsnapshot::params::use_sudo,
   $wrapper_path         = $rsnapshot::params::wrapper_path,
 ) inherits rsnapshot::params {
+  $wrapper_path_normalized = regsubst($wrapper_path, '\/$', '')
 
   # Install
   include rsnapshot::client::install
 
-  $wrapper_path_normalized = regsubst($wrapper_path, '\/$', '')
-
   # Add User
   class { 'rsnapshot::client::user' :
     client_user  => $client_user,
-    server_user  => $server_user,
-    server       => $server,
-    use_sudo     => $use_sudo,
-    setup_sudo   => $setup_sudo,
     push_ssh_key => $push_ssh_key,
+    server       => $server,
+    server_user  => $server_user,
+    setup_sudo   => $setup_sudo,
+    use_sudo     => $use_sudo,
     wrapper_path => $wrapper_path_normalized,
-  }->
+  }
 
   # Add Wrapper Scripts
   class { 'rsnapshot::client::wrappers' :
-    wrapper_path     => $wrapper_path_normalized,
-    preexec          => $cmd_wrapper_preexec,
-    postexec         => $cmd_wrapper_postexec,
     cmd_client_rsync => $cmd_client_rsync,
     cmd_client_sudo  => $cmd_client_sudo,
+    postexec         => $cmd_wrapper_postexec,
+    preexec          => $cmd_wrapper_preexec,
+    wrapper_path     => $wrapper_path_normalized,
   }
 
   # Export client object to get picked up by the server.
   @@rsnapshot::server::config { $::fqdn:
-    server              => $server,
+    backup_hourly_cron  => $backup_hourly_cron,
+    backup_time_dom     => $backup_time_dom,
+    backup_time_hour    => $backup_time_hour,
+    backup_time_minute  => $backup_time_minute,
+    backup_time_weekday => $backup_time_weekday,
     client_user         => $client_user,
+    cmd_postexec        => $cmd_postexec,
+    cmd_preexec         => $cmd_preexec,
     directories         => $directories,
-    includes            => $includes,
+    exclude_files       => $exclude_files,
     excludes            => $excludes,
     include_files       => $include_files,
-    exclude_files       => $exclude_files,
-    backup_hourly_cron  => $backup_hourly_cron,
-    backup_time_minute  => $backup_time_minute,
-    backup_time_hour    => $backup_time_hour,
-    backup_time_weekday => $backup_time_weekday,
-    backup_time_dom     => $backup_time_dom,
-    cmd_preexec         => $cmd_preexec,
-    cmd_postexec        => $cmd_postexec,
-    retain_hourly       => $retain_hourly,
-    retain_daily        => $retain_daily,
-    retain_weekly       => $retain_weekly,
-    retain_monthly      => $retain_monthly,
+    includes            => $includes,
     one_fs              => $one_fs,
-    rsync_short_args    => $rsync_short_args,
+    retain_daily        => $retain_daily,
+    retain_hourly       => $retain_hourly,
+    retain_monthly      => $retain_monthly,
+    retain_weekly       => $retain_weekly,
     rsync_long_args     => $rsync_long_args,
-    wrapper_path        => $wrapper_path_normalized,
+    rsync_short_args    => $rsync_short_args,
+    server              => $server,
     ssh_args            => $ssh_args,
     use_sudo            => $use_sudo,
+    wrapper_path        => $wrapper_path_normalized,
   }
 
 }

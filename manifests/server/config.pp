@@ -69,11 +69,11 @@ define rsnapshot::server::config (
 
   $rsync_long_args_final = strip("${ssh_args_processed} ${rsync_long_args} ${rsync_wrapper_processed}")
 
-
   file { $snapshot_root :
     ensure  => directory,
-    require => File[$backup_path]
-  } ->
+    require => File[$backup_path],
+    before  => File[$log_file],
+  }
 
   file { $log_file :
     ensure  => present,
@@ -81,53 +81,53 @@ define rsnapshot::server::config (
   }
 
   $programs = {
-    cmd_cp => $rsnapshot::server::cmd_cp,
-    cmd_rm => $rsnapshot::server::cmd_rm,
-    cmd_rsync => $rsnapshot::server::cmd_rsync,
-    cmd_ssh => $rsnapshot::server::cmd_ssh,
-    cmd_logger => $rsnapshot::server::cmd_logger,
-    cmd_du => $rsnapshot::server::cmd_du,
-    cmd_rsnapshot_diff => $rsnapshot::server::cmd_rsnapshot_diff,
+    cmd_cp                 => $rsnapshot::server::cmd_cp,
+    cmd_rm                 => $rsnapshot::server::cmd_rm,
+    cmd_rsync              => $rsnapshot::server::cmd_rsync,
+    cmd_ssh                => $rsnapshot::server::cmd_ssh,
+    cmd_logger             => $rsnapshot::server::cmd_logger,
+    cmd_du                 => $rsnapshot::server::cmd_du,
+    cmd_rsnapshot_diff     => $rsnapshot::server::cmd_rsnapshot_diff,
     linux_lvm_cmd_lvcreate => $rsnapshot::server::linux_lvm_cmd_lvcreate,
     linux_lvm_cmd_lvremove => $rsnapshot::server::linux_lvm_cmd_lvremove,
-    linux_lvm_cmd_mount => $rsnapshot::server::linux_lvm_cmd_mount,
-    linux_lvm_cmd_umount => $rsnapshot::server::linux_lvm_cmd_umount,
+    linux_lvm_cmd_mount    => $rsnapshot::server::linux_lvm_cmd_mount,
+    linux_lvm_cmd_umount   => $rsnapshot::server::linux_lvm_cmd_umount,
   }
 
   $options = {
-    lockfile => $lock_file,
-    logfile => $log_file,
-    no_create_root => $no_create_root,
-    verbose => $verbose,
-    loglevel => $log_level,
-    link_dest => $link_dest,
-    sync_first => $sync_first,
-    use_lazy_deletes => $use_lazy_deletes,
-    rsync_numtries => $rsync_numtries,
+    cmd_postexec           => $cmd_postexec,
+    cmd_preexec            => $cmd_preexec,
+    du_args                => $du_args,
+    link_dest              => $link_dest,
+    lockfile               => $lock_file,
+    logfile                => $log_file,
+    loglevel               => $log_level,
+    no_create_root         => $no_create_root,
+    one_fs                 => $one_fs,
+    rsync_long_args        => $rsync_long_args_final,
+    rsync_numtries         => $rsync_numtries,
+    rsync_short_args       => $rsync_short_args,
     stop_on_stale_lockfile => $stop_on_stale_lockfile,
-    cmd_preexec => $cmd_preexec,
-    cmd_postexec => $cmd_postexec,
-    one_fs => $one_fs,
-    rsync_short_args => $rsync_short_args,
-    rsync_long_args => $rsync_long_args_final,
-    du_args => $du_args,
+    sync_first             => $sync_first,
+    use_lazy_deletes       => $use_lazy_deletes,
+    verbose                => $verbose,
   }
 
   $lockfile = "${rsnapshot::server::lock_path}${name}"
-  $logfile = "${rsnapshot::server::log_path}${name}"
+  $logfile  = "${rsnapshot::server::log_path}${name}"
 
   # config file
   concat { $config_file :
-    owner => $server_user,
     group => $server_user,
     mode  => '0644',
+    owner => $server_user,
     warn  => true
   }
 
   concat::fragment { "${config_file}_rsnapshot_header" :
-    target  => $config_file,
     content => template('rsnapshot/config.erb'),
-    order   => 01
+    order   => 01,
+    target  => $config_file,
   }
 
   Rsnapshot::Server::Backup_config <<| host == $name |>> {

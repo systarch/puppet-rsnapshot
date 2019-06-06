@@ -1,20 +1,19 @@
 {
-  "name": "tedivm-rsnapshot",
-  "version": "0.5.2",
-  "author": "tedivm",
+  "name": "comport3-rsnapshot",
+  "version": "0.0.1",
+  "author": "comport3",
   "summary": "Secure and easy backups with rsnapshot.",
   "tags": [
     "rsnapshot",
     "backups"
   ],
   "license": "MIT",
-  "source": "https://github.com/tedivm/puppet-rsnapshot",
-  "project_page": "https://github.com/tedivm/puppet-rsnapshot",
-  "issues_url": "https://github.com/tedivm/puppet-rsnapshot/issues",
+  "source": "https://github.com/comport3/puppet-rsnapshot",
+  "project_page": "https://github.com/comport3/puppet-rsnapshot",
   "dependencies": [
     {
-      "name": "puppetlabs-concat",
-      "version_requirement": "< 2.0.0"
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 3.0.0 <= 6.0.0"
     },
     {
       "name": "jtopjian/sshkeys",
@@ -22,12 +21,12 @@
     },
     {
       "name": "saz/sudo",
-      "version_requirement": "< 4.0.0"
+      "version_requirement": "<= 6.0.0"
     }
   ],
   "operatingsystem_support": [
     { "operatingsystem": "Debian", "operatingsystemrelease": ["6", "7"]},
     { "operatingsystem": "RedHat", "operatingsystemrelease": ["5.0", "6.0"]},
-    { "operatingsystem": "Ubuntu", "operatingsystemrelease": ["12.04", "14.04"]}
+    { "operatingsystem": "Ubuntu", "operatingsystemrelease": ["16.04", "18.04"]}
   ]
 }

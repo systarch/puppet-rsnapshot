@@ -8,9 +8,8 @@ define rsnapshot::server::backup_config (
 ){
   assert_private()
   concat::fragment { "${config_file}_entry_${source_path}" :
-    target  => $config_file,
     content => template('rsnapshot/backup_point.erb'),
-    order   => 20
+    order   => 20,
+    target  => $config_file,
   }
-
 }

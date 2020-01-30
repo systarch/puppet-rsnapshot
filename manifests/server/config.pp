@@ -73,9 +73,9 @@ define rsnapshot::server::config (
   file { $snapshot_root :
     ensure  => directory,
     require => File[$backup_path]
-  } ->
+  }
 
-  file { $log_file :
+  -> file { $log_file :
     ensure  => present,
     require => File[$log_path]
   }

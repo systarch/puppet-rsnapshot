@@ -83,10 +83,10 @@ class rsnapshot::client (
     setup_sudo   => $setup_sudo,
     push_ssh_key => $push_ssh_key,
     wrapper_path => $wrapper_path_normalized,
-  }->
+  }
 
   # Add Wrapper Scripts
-  class { 'rsnapshot::client::wrappers' :
+  -> class { 'rsnapshot::client::wrappers' :
     wrapper_path     => $wrapper_path_normalized,
     preexec          => $cmd_wrapper_preexec,
     postexec         => $cmd_wrapper_postexec,

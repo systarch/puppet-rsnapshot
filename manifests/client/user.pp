@@ -23,10 +23,10 @@ class rsnapshot::client::user (
   # Setup Group
   group { $client_user :
     ensure         => present,
-  } ->
+  }
 
   # Setup User
-  user { $client_user :
+  -> user { $client_user :
     ensure         => present,
     home           => "/home/${client_user}",
     managehome     => true,

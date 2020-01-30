@@ -66,17 +66,17 @@ class rsnapshot::server(
     ensure => directory,
     owner  => $server_user,
     group  => $server_user
-  }->
+  }
 
   # Add logging folder
-  file { $backup_path :
+  -> file { $backup_path :
     ensure => directory,
     owner  => $server_user,
     group  => $server_user
-  }->
+  }
 
 
-  Rsnapshot::Server::Config <<| server == $::fqdn |>> {
+  -> Rsnapshot::Server::Config <<| server == $::fqdn |>> {
     config_path            => $::rsnapshot::server::config_path,
     log_path               => $::rsnapshot::server::log_path,
     lock_path              => $::rsnapshot::server::lock_path,

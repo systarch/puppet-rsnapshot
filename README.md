@@ -481,6 +481,19 @@ an rsnapshot server to backup clients that are not controlled by puppet.
 * `wrapper_rsync_sender`: The name of the rsync sender wrapper script.
 * `wrapper_rsync_ssh`: The name of the rsync ssh wrapper script.
 
+## Testing
+
+To run the unit tests, install the necessary gems:
+
+```
+bundle install
+```
+
+And then execute the command:
+
+```
+bundle exec rake spec
+```
 
 ## Development
 

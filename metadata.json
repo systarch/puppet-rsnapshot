@@ -12,6 +12,10 @@
   "project_page": "https://github.com/systarch/puppet-rsnapshot",
   "dependencies": [
     {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.25.0"
+    },
+    {
       "name": "puppetlabs-concat",
       "version_requirement": "> 1.0.0 < 8.0.0"
     },

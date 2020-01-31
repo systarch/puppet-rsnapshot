@@ -63,8 +63,11 @@ class rsnapshot::client (
     wrapper_path     => $wrapper_path_normalized,
   }
 
+  ### TODO reenable export of resources from client->server
+  # @@rsnapshot::server::config { $::fqdn:
+  ###
   # Export client object to get picked up by the server.
-  @@rsnapshot::server::config { $::fqdn:
+  rsnapshot::server::config { $::fqdn:
     backup_hourly_cron  => $backup_hourly_cron,
     backup_time_dom     => $backup_time_dom,
     backup_time_hour    => $backup_time_hour,

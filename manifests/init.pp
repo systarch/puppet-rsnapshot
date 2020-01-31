@@ -4,16 +4,15 @@
 #
 class rsnapshot(
   Stdlib::Host $fqdn = $::fqdn,
-  Optional[Hash[String,Hash]] $servers = {},
-  Optional[Hash[String,Hash]] $clients = {},
+  Optional[Hash[Stdlib::Host,Hash]] $servers = {},
+  Optional[Hash[Stdlib::Host,Hash]] $clients = {},
 ) {
-  # configure this machine if it is listed as a server
-  if $fqdn in $servers {
-    create_resources('class', { 'rsnapshot::server' => $servers[$fqdn] })
-  }
-
-  # configure this machine if it is listed as a client
-  if $fqdn in $clients {
-    ensure_resource('rsnapshot::client', $fqdn, $clients[$fqdn])
+  # Decide on the mode: no hiera config for us? -> puppetmaster as before
+  if $servers.length < 1 and $clients.length < 1 {
+    $mode = 'puppetmaster'
+    include ::rsnapshot::mode::puppetmaster
+  } else {
+    $mode = 'masterless'
+    include ::rsnapshot::mode::masterless
   }
 }

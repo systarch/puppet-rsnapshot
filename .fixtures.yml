@@ -5,3 +5,7 @@ fixtures:
     stdlib:
       repo: "puppetlabs/stdlib"
       ref: "4.25.0"
+    cron_core:
+      repo: "puppetlabs/cron_core"
+      ref: "1.0.0"
+      puppet_version: ">= 6.0.0"

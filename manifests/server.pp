@@ -22,9 +22,8 @@ class rsnapshot::server(
 
   # Auto create root 4096 bit SSH RSA key pair if it doesn't exist
   exec { 'create root ssh key pair':
-    command     => 'ssh-keygen -b 4096 -t rsa -f /root/.ssh/id_rsa -q -N ""',
+    command     => '/usr/bin/ssh-keygen -b 4096 -t rsa -f /root/.ssh/id_rsa -q -N ""',
     creates     => ['/root/.ssh/id_rsa','/root/.ssh/id_rsa.pub'],
-    path        => $::path,
   }
 
   $rsnapshot_logrotate = @(EOF)
@@ -71,22 +70,23 @@ class rsnapshot::server(
     owner  => $server_user,
   }
 
-  -> Rsnapshot::Server::Config <<| server == $::fqdn |>> {
-    backup_path            => $::rsnapshot::server::backup_path,
-    config_path            => $::rsnapshot::server::config_path,
-    du_args                => $::rsnapshot::server::du_args,
-    link_dest              => $::rsnapshot::server::link_dest,
-    lock_path              => $::rsnapshot::server::lock_path,
-    loglevel               => $::rsnapshot::server::loglevel,
-    log_path               => $::rsnapshot::server::log_path,
-    no_create_root         => $::rsnapshot::server::no_create_root,
+  # Collect all local resources that point to us as their server
+  Rsnapshot::Server::Config <| server == $rsnapshot::fqdn |> {
+    backup_path            => $rsnapshot::server::backup_path,
+    config_path            => $rsnapshot::server::config_path,
+    du_args                => $rsnapshot::server::du_args,
+    link_dest              => $rsnapshot::server::link_dest,
+    lock_path              => $rsnapshot::server::lock_path,
+    loglevel               => $rsnapshot::server::log_level,
+    log_path               => $rsnapshot::server::log_path,
+    no_create_root         => $rsnapshot::server::no_create_root,
     require                => File[$config_path],
-    rsync_numtries         => $::rsnapshot::server::rsync_numtries,
-    server_user            => $server_user,
-    stop_on_stale_lockfile => $::rsnapshot::server::stop_on_stale_lockfile,
-    sync_first             => $::rsnapshot::server::sync_first,
-    use_lazy_deletes       => $::rsnapshot::server::use_lazy_deletes,
-    verbose                => $::rsnapshot::server::verbose,
+    rsync_numtries         => $rsnapshot::server::rsync_numtries,
+    server_user            => $rsnapshot::server::server_user,
+    stop_on_stale_lockfile => $rsnapshot::server::stop_on_stale_lockfile,
+    sync_first             => $rsnapshot::server::sync_first,
+    use_lazy_deletes       => $rsnapshot::server::use_lazy_deletes,
+    verbose                => $rsnapshot::server::verbose,
   }
 
 }

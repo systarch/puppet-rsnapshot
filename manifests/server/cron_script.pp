@@ -31,7 +31,7 @@ class rsnapshot::server::cron_script (
   }
 
   if ($retain_hourly > 0) {
-    cron { rsnapshot-hourly :
+    cron { 'rsnapshot-hourly' :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh hourly',
       minute  => $backup_time_minute,
       hour    => $backup_hourly_cron,
@@ -40,7 +40,7 @@ class rsnapshot::server::cron_script (
   }
 
   if ($retain_daily > 0) {
-    cron { rsnapshot-daily :
+    cron { 'rsnapshot-daily' :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh daily',
       hour    => $backup_time_hour,
       minute  => $backup_time_minute,
@@ -49,7 +49,7 @@ class rsnapshot::server::cron_script (
   }
 
   if ($retain_weekly > 0) {
-    cron { rsnapshot-weekly :
+    cron { 'rsnapshot-weekly' :
       command => '/etc/rsnapshot/scripts/rsnapshot_backup.sh weekly',
       hour    => ($backup_time_hour + 12) % 24,
       minute  => $backup_time_minute,
@@ -59,7 +59,7 @@ class rsnapshot::server::cron_script (
   }
 
   if ($retain_monthly > 0) {
-    cron { rsnapshot-monthly :
+    cron { 'rsnapshot-monthly' :
       command  => '/etc/rsnapshot/scripts/rsnapshot_backup.sh monthly',
       hour     => ($backup_time_hour + 10) % 24,
       minute   => $backup_time_minute,

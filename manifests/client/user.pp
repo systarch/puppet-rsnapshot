@@ -1,16 +1,15 @@
 class rsnapshot::client::user (
-  $client_user = '',
-  $server_user = '',
-  $server = '',
-  $use_sudo = true,
-  $setup_sudo = true,
-  $push_ssh_key = true,
-  $wrapper_path = '',
-  $wrapper_sudo = $rsnapshot::params::wrapper_sudo,
+  $client_user          = '',
+  $push_ssh_key         = true,
+  $server               = '',
+  $server_user          = '',
+  $setup_sudo           = true,
+  $use_sudo             = true,
+  $wrapper_path         = '',
   $wrapper_rsync_sender = $rsnapshot::params::wrapper_rsync_sender,
-  $wrapper_rsync_ssh = $rsnapshot::params::wrapper_rsync_ssh,
-  ) {
-
+  $wrapper_rsync_ssh    = $rsnapshot::params::wrapper_rsync_ssh,
+  $wrapper_sudo         = $rsnapshot::params::wrapper_sudo,
+) {
   assert_private()
 
   $wrapper_path_norm = regsubst($wrapper_path, '\/$', '')
@@ -28,23 +27,20 @@ class rsnapshot::client::user (
   # Setup User
   -> user { $client_user :
     ensure         => present,
+    gid            => $client_user,
     home           => "/home/${client_user}",
     managehome     => true,
     purge_ssh_keys => true,
     shell          => '/bin/bash',
-    gid            => $client_user,
-    password       => '*'
   }
 
   ## Get Key for remote backup user
   if $push_ssh_key {
+    $backup_server_ip     = inline_template("<%= Addrinfo.getaddrinfo('${server}', 'ssh', nil, :STREAM).first.ip_address %>")
     $server_user_exploded = "${server_user}@${server}"
-    $backup_server_ip = inline_template("<%= Addrinfo.getaddrinfo('${server}', 'ssh', nil, :STREAM).first.ip_address %>")
+
     sshkeys::set_authorized_key { "${server_user_exploded} to ${client_user}":
       local_user  => $client_user,
-      remote_user => $server_user_exploded,
-      target      => "/home/${client_user}/.ssh/authorized_keys",
-      require     => User[$client_user],
       options     => [
         "command=\"${allowed_command}\"",
         'no-port-forwarding',
@@ -52,15 +48,19 @@ class rsnapshot::client::user (
         'no-X11-forwarding',
         'no-pty',
         "from=\"${backup_server_ip},${server}\""
-      ]
+      ],
+      remote_user => $server_user_exploded,
+      require     => User[$client_user],
+      target      => "/home/${client_user}/.ssh/authorized_keys",
+
     }
   }
 
   # Add sudo config if needed.
   if $use_sudo and $setup_sudo {
     sudo::conf { 'backup_user':
-      priority => 99,
       content  => "${client_user} ALL= NOPASSWD: ${wrapper_path}/rsync_sender.sh",
+      priority => 99,
       require  => User[$client_user]
     }
   }

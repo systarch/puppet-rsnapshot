@@ -100,16 +100,13 @@ utilizing common Puppet patterns.
 * Multiple puppet runs (client, then server, then client again) need to occur
   for all resources to be created on both servers.
 
-
 ### Beginning with rsnapshot
 
 On the backup server (backups.example.com) include the `rsnapshot::server` class
 and tell it where to store the backups.
 
 ```puppet
-class { 'rsnapshot::server':
-  backup_path    => '/backups/rsnapshot'
-}
+class { 'rsnapshot::server': }
 ```
 
 On the machine you want to back up include the `rsnapshot::client` class and
@@ -118,18 +115,11 @@ tell it which server to back up to and what directories to back up.
 ```puppet
 class { 'rsnapshot::client':
   server      => 'backups.example.com',
-  directories => [
-    '/etc',
-    '/home',
-    '/root'
-  ]
 }
 ```
-
 That's it! A secure backup user will be created on the client, with the
 appropriate user, ssh key, and permissions, and that machine will get it's
 configuration pushed to the backup server.
-
 
 ## Usage
 
@@ -141,7 +131,7 @@ on that server.
 This class can be included without any parameters and the defaults should work.
 
 ```puppet
-class { 'rsnapshot::server':  
+class { 'rsnapshot::server':
   config_path            => '/etc/rsnapshot',
   backup_path            => '/backups/rsnapshot',
   log_path               => '/var/log/rsnapshot',
@@ -165,8 +155,8 @@ Settings in the client class are specific to that one client node. The
 parameters in this class will get exported to a backup server and merged with
 it's parameters to build the client specific configuration.
 
-This class has two required parameters- the backup `server`, which should be an
-fqdn, and an array of `directories` to back up. Additional options, such as
+This class has 1 required parameter- the backup `server`, which should be an
+fqdn, and an optional parameter for an array of `directories` to back up. Additional options, such as
 retain rules or cronjob times, can be overridden as needed.
 
 When the retain values are set to zero, no cron entry for that specific
@@ -197,47 +187,32 @@ class { 'rsnapshot::client':
   retain_monthly      => 3,
   one_fs              => undef,
   rsync_short_args    => '-a',
-  rsync_long_args     => '--delete --numeric-ids --relative --delete-excluded'
+  rsync_long_args     => '--delete --numeric-ids --relative --delete-excluded',
   ssh_args            => undef,
   use_sudo            => true,
   setup_sudo          => true,
   push_ssh_key        => true,
-  wrapper_path        => '/opt/rsnapshot_wrappers/',  
+  wrapper_path        => '/opt/rsnapshot_wrappers/',
 }
 ```
 
+# Back Up Pre and Post Actions
 
-### Adding Backup Points to Profiles
+When backing up clients hosting services like databases, you may want to run a
+script to snapshot or quiesce the service.  You can do this by specifying pre
+or post wrapper actions.  These will be run on the client immediately before or
+after the rsync operation.
 
-This module provides a resource type, `rnapshot::backup`, that can be used to
-define directories to backup outside of the `rsnapshot::client` class. This lets
-developers define backup points as resources inside other classes.
-
-For example, in a mysql profile it would make sense to backup the directory
-where the mysqldumps get stored. Instead of attempting to define that using
-`rsnapshot::client` it can be added directly in the mysql profile.
+For example, to export the contents of the puppetdb database before running a
+backup of your puppetmaster:
 
 ```puppet
 
-class profiles::mysql {
-
-  class { '::mysql::server': }->
-
-  file { '/opt/mysqldumps':
-    ensure => 'directory'
-  }->
-
-  cron { 'vicarious_profiles_mysqldump':
-    command => '/usr/bin/mysqldump --defaults-extra-file=/root/.my.cnf --opt  --single-transaction --events --routines --triggers --hex-blob --comments --all-databases | /bin/gzip > /opt/mysqldumps/backups_\$(date +\%Y-\%m-\%d_\%H:\%M:\%S).sql.gz',
-    user    => root,
-    hour    => 4,
-    minute  => 0
-  }->
-
-  rsnapshot::backup { "${::fqdn}_mysql_backups":
-    source_path => '/opt/mysqldumps'
+class profiles::puppetmaster {
+  rsnapshot::client {
+    cmd_wrapper_preexec  => ['/usr/sbin/puppetdb export -o /root/puppetdb.export --port 8083'],
+    cmd_wrapper_postexec => ['rm -f /root/puppetdb.export'],
   }
-
 }
 ```
 
@@ -342,6 +317,7 @@ rsnapshot::server::config { 'backupclient.example.com':
 * `rsnapshot::client::install`: Installs needed packages on client side.
 * `rsnapshot::client::user`: Sets up client side user and permissions.
 * `rsnapshot::client::wrappers`: Adds wrapper scripts to client machine.
+* `rsnapshot::server::cron_script`: Adds a shell script wrapper to backup machines one at a time and associated CRON tasks.
 * `rsnapshot::server::install`: Installs needed packages on server side.
 * `rsnapshot::params` Contains default parameters used by this module.
 
